@@ -40,12 +40,5 @@ public class InitFragment extends Fragment {
         return view;
     }
 
-    private String llegir_SharedPreferences() {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-        return sharedPreferences.getString("nom","");
-    }
-
 
 }

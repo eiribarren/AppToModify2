@@ -42,14 +42,7 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
     @Override
     public void guardar_nom_SharedPreferences(String nom) {
         //Guardar nom en SharedPreferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("nom",nom);
-        editor.commit();
 
-        //Obrir el primer fragment
-        Fragment fragment = new InitFragment();
-        cargar_fragment(fragment);
     }
 
     private void cargar_fragment(Fragment fragment) {
@@ -60,9 +53,6 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.general, menu);
         return true;
     }
 
@@ -89,59 +79,7 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
         }
     }
 
-    @Override
-    public void cercar_nom_bbdd(String nom) {
-        // Query a SQLite
-        Log.i("SQLite", "cercar_nom_bbdd");
-        SQLiteOpenHelper sqLiteOpenHelper = new MyBBDD_Helper(getApplicationContext());
-        SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
 
-        String[] selectionArgs = {nom};
-
-        Cursor cursor = db.query(MyBBDD_Schema.EntradaBBDD.TABLE_NAME,
-                null,
-                MyBBDD_Schema.EntradaBBDD.COLUMNA1 + " = ?",
-                selectionArgs,
-                null,
-                null,
-                null);
-
-        alumneList.clear();
-
-        while (cursor.moveToNext()){
-            Alumne alumne = new Alumne(
-                            cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA1)),
-                            cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA2)),
-                            cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA3)),
-                            cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA4)));
-
-            Log.i("SQLite", "añado alumno "+ alumne.toString());
-
-            alumneList.add(alumne);
-        }
-
-        Fragment fragment = new LlistaAlumnesFragment();
-        cargar_fragment(fragment);
-
-    }
-
-
-
-    @Override
-    public void add_alumne_BBDD(Alumne alumne) {
-        // Insert a SQLite
-        Log.i("SQLite", "add_alumne_BBDD");
-        SQLiteOpenHelper sqLiteOpenHelper = new MyBBDD_Helper(getApplicationContext());
-        SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(MyBBDD_Schema.EntradaBBDD.COLUMNA1, alumne.getNom());
-        values.put(MyBBDD_Schema.EntradaBBDD.COLUMNA2, alumne.getCognom());
-        values.put(MyBBDD_Schema.EntradaBBDD.COLUMNA3, alumne.getCurs());
-        values.put(MyBBDD_Schema.EntradaBBDD.COLUMNA4, alumne.getTelefon());
-
-        db.insert(MyBBDD_Schema.EntradaBBDD.TABLE_NAME, null, values);
-    }
 
     @Override
     public List<Alumne> carregar_alumnes() {

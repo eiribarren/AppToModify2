@@ -50,10 +50,6 @@ public class LlistaAlumnesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_llista_alumnes, container, false);
         recyclerView = view.findViewById(R.id.recycler);
 
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new AlumnesAdapter(alumnes);
-        recyclerView.setAdapter(adapter);
 
 
         return view;
@@ -86,15 +82,13 @@ public class LlistaAlumnesFragment extends Fragment {
 
         List<Alumne> llistatAlumnes;
 
-        public AlumnesAdapter (List<Alumne> llista){
-            llistatAlumnes = llista;
+        public AlumnesAdapter (){
+
         }
 
         @NonNull
         @Override
         public AlumnesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.viewholder_llistat_alumnes, viewGroup, false);
 
             return new AlumnesViewHolder(view);
         }
@@ -102,11 +96,7 @@ public class LlistaAlumnesFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull AlumnesViewHolder alumnesViewHolder, int i) {
 
-            alumnesViewHolder.alumneinfo.setText(llistatAlumnes.get(i).getNom() +
-            " "+ llistatAlumnes.get(i).getCognom());
-            alumnesViewHolder.curs.setText("CURS: "+ llistatAlumnes.get(i).getCurs());
-            alumnesViewHolder.telefon.setText("Telèfon: "+ llistatAlumnes.get(i).getTelefon());
-        }
+             }
 
         @Override
         public int getItemCount() {
