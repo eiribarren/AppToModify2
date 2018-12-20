@@ -3,6 +3,7 @@
     <string name="introduir_nom">Escriu el teu nom</string>
     <string name="introduir_cognom">nom alumne/s</string>
     <string name="text_cercar">Escriu el nom a cercar </string>
+    <string name="text_add_alumne">Alumno introducido</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

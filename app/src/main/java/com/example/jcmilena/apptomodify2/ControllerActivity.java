@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,7 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
         cv.put(MyBBDD_Schema.EntradaBBDD.COLUMNA3, alumne.getCurs());
         cv.put(MyBBDD_Schema.EntradaBBDD.COLUMNA4, alumne.getTelefon());
         db.insert(MyBBDD_Schema.EntradaBBDD.TABLE_NAME, null, cv);
+        Toast.makeText(this, R.string.text_add_alumne, Toast.LENGTH_SHORT).show();
     }
 
     @Override
