@@ -26,11 +26,14 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
     Toolbar miToolbar;
 
     List<Alumne> alumneList = new ArrayList<>();
+    MyBBDD_Helper dbhelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
+
+        dbhelper = new MyBBDD_Helper(this);
 
         miToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(miToolbar);
@@ -42,7 +45,10 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
     @Override
     public void guardar_nom_SharedPreferences(String nom) {
         //Guardar nom en SharedPreferences
-
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("nom", nom).commit();
+        cargar_fragment(new InitFragment());
     }
 
     private void cargar_fragment(Fragment fragment) {
@@ -53,6 +59,7 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.general, menu);
         return true;
     }
 
@@ -85,4 +92,37 @@ public class ControllerActivity extends AppCompatActivity implements NameDialog.
     public List<Alumne> carregar_alumnes() {
         return alumneList;
     }
+
+    @Override
+    public void add_alumne_BBDD(Alumne alumne) {
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(MyBBDD_Schema.EntradaBBDD.COLUMNA1, alumne.getNom());
+        cv.put(MyBBDD_Schema.EntradaBBDD.COLUMNA2, alumne.getCognom());
+        cv.put(MyBBDD_Schema.EntradaBBDD.COLUMNA3, alumne.getCurs());
+        cv.put(MyBBDD_Schema.EntradaBBDD.COLUMNA4, alumne.getTelefon());
+        db.insert(MyBBDD_Schema.EntradaBBDD.TABLE_NAME, null, cv);
+    }
+
+    @Override
+    public void cercar_nom_bbdd(String nom) {
+        SQLiteDatabase db = dbhelper.getReadableDatabase();
+        alumneList = new ArrayList<>();
+        String[] columnas = { MyBBDD_Schema.EntradaBBDD.COLUMNA1,
+                              MyBBDD_Schema.EntradaBBDD.COLUMNA2,
+                              MyBBDD_Schema.EntradaBBDD.COLUMNA3,
+                              MyBBDD_Schema.EntradaBBDD.COLUMNA4 };
+        String[] args = { nom };
+        Cursor cursor = db.query( MyBBDD_Schema.EntradaBBDD.TABLE_NAME, columnas, MyBBDD_Schema.EntradaBBDD.COLUMNA1 + "=?", args, null, null, null);
+        while ( cursor.moveToNext() ) {
+            alumneList.add( new Alumne( cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA1)),
+                                        cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA2)),
+                                        cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA3)),
+                                        cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA4))
+                                        )
+                            );
+        }
+        cargar_fragment(new LlistaAlumnesFragment());
+    }
+
 }

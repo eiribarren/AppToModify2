@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -49,7 +50,10 @@ public class LlistaAlumnesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_llista_alumnes, container, false);
         recyclerView = view.findViewById(R.id.recycler);
-
+        adapter = new AlumnesAdapter(alumnes);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(adapter);
 
 
         return view;
@@ -82,21 +86,23 @@ public class LlistaAlumnesFragment extends Fragment {
 
         List<Alumne> llistatAlumnes;
 
-        public AlumnesAdapter (){
-
+        public AlumnesAdapter ( List<Alumne> llistatAlumnes ){
+            this.llistatAlumnes = llistatAlumnes;
         }
 
         @NonNull
         @Override
         public AlumnesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
-            return new AlumnesViewHolder(view);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.viewholder_llistat_alumnes, viewGroup, false);
+            return new AlumnesViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(@NonNull AlumnesViewHolder alumnesViewHolder, int i) {
-
-             }
+                alumnesViewHolder.alumneinfo.setText(llistatAlumnes.get(i).getNom() + " " + llistatAlumnes.get(i).getCognom());
+                alumnesViewHolder.curs.setText(llistatAlumnes.get(i).getCurs());
+                alumnesViewHolder.telefon.setText(llistatAlumnes.get(i).getCurs());
+            }
 
         @Override
         public int getItemCount() {
